@@ -3,6 +3,7 @@ import Splash from "./pages/Splash";
 import Home from "./pages/Home";
 import Test from "./pages/Test";
 import Review from "./pages/Review";
+import Word from "./pages/Word";
 
 function App() {
   const router = createBrowserRouter([
@@ -21,6 +22,10 @@ function App() {
     {
       path: "/review",
       element: <Review />,
+    },
+    {
+      path: "/word",
+      element: <Word />,
     },
   ]);
   return (
