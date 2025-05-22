@@ -12,10 +12,14 @@
   "dependencies": {
     "@gsap/react": "^2.1.2",
     "@tailwindcss/vite": "^4.1.7",
+    "@types/react-spinner": "^0.2.3",
+    "axios": "^1.9.0",
     "gsap": "^3.13.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.0",
+    "react-spinner": "^0.2.7",
+    "react-spinners": "^0.17.0",
     "tailwindcss": "^4.1.7"
   },
   "devDependencies": {
