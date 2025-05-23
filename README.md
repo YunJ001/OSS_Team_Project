@@ -98,6 +98,8 @@ so users will soon be able to revisit what they’ve learned and keep track of t
 ## Spec
 
 **우강식**
+Home page (홈 화면)
+Test Page (단어 시험 페이지)
 
 **유윤지**
 Word Page (단어 학습 페이지)
