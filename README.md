@@ -100,5 +100,71 @@ so users will soon be able to revisit what they’ve learned and keep track of t
 **우강식**
 
 **유윤지**
+Word Page (단어 학습 페이지)
+
+Short description of features
+
+사용자가 지정한 수량의 영어 단어를 학습하는 핵심 페이지입니다. WordsAPI로 단어를 가져오고, Google Translate API로 실시간 한국어 번역을 제공합니다. 직관적인 UI로 단어를 넘겨가며 학습할 수 있습니다.
+The core page for users to learn a specified number of English words. It fetches words via WordsAPI and provides real-time Korean translations using the Google Translate API. Users can navigate through words with an intuitive UI.
+
+Components (Technologies and Tools)
+
+React, TypeScript: UI 개발 및 타입 안정성 확보.
+React Router: 페이지 내비게이션 관리.
+TailwindCSS: 효율적인 UI 스타일링.
+WordsAPI: 영어 단어 데이터 제공.
+Google Translate API: 단어 번역 제공.
+Vite: 빠르고 효율적인 개발 환경.
+React, TypeScript: UI development and type safety.
+React Router: Page navigation management.
+TailwindCSS: Efficient UI styling.
+WordsAPI: Provides English word data.
+Google Translate API: Provides word translations.
+Vite: Fast and efficient development environment.
+
+Specs
+
+단어 수 입력: 학습할 단어 개수 지정 (1개 이상).
+동적 로딩: API를 통한 단어 및 번역 실시간 로딩.
+진행 표시: 로딩 중 메시지, 현재 단어 순서(N/총 개수) 표시.
+단어 이동: '이전', '다음' 버튼으로 단어 탐색.
+오류 처리: API 실패 시 오류 메시지 표시.
+완료 화면: 학습 완료 후 다음 단계(Test, Home)로 이동.
+
+Word Count Input: Specify number of words to learn (1+).
+Dynamic Loading: Real-time word and translation fetching via APIs.
+Progress Display: Loading messages, current word position (N/Total).
+Word Navigation: 'Previous', 'Next' buttons for word exploration.
+Error Handling: Displays error messages on API failure.
+Completion Screen: Transition to next steps (Test, Home) after study.
+
+Functional Requirements / Non-functional Requirements
+
+Functional Requirements (기능 요구사항)
+
+사용자가 단어 개수를 입력하고, 해당 단어들을 순차적으로 학습할 수 있어야 합니다.
+WordsAPI와 Google Translate API를 통해 단어 데이터와 번역을 정확히 가져와야 합니다.
+'다음'/'이전' 버튼 클릭으로 단어 전환 및 '완료' 화면으로의 전환이 원활해야 합니다.
+API 오류 발생 시 사용자에게 명확한 피드백을 제공해야 합니다.
+Users must be able to input a word count and sequentially learn the specified words.
+The system must accurately fetch word data from WordsAPI and translations from Google Translate API.
+Smooth word navigation via 'Next'/'Previous' buttons and transition to a 'Completion' screen must be ensured.
+Clear feedback must be provided to the user upon API errors.
+
+Non-functional Requirements (비기능 요구사항)
+
+성능: 단어 로딩 및 번역이 빠르게 이루어져야 합니다 (5초 이내).
+사용성: 학습 과정이 직관적이고 사용자 친화적이어야 합니다.
+안정성: API 실패에도 앱이 중단되지 않고 오류를 처리해야 합니다.
+보안: API 키는 환경 변수를 통해 안전하게 관리되어야 합니다.
+확장성: API 변경 또는 추가에 유연하도록 설계되어야 합니다.
+일관성: 앱의 전반적인 디자인 테마를 준수해야 합니다.
+
+Performance: Word loading and translation should be fast (within 5 seconds).
+Usability: The learning process should be intuitive and user-friendly.
+Reliability: The app should handle API failures gracefully without crashing.
+Security: API keys must be securely managed via environment variables.
+Scalability: Designed for flexibility in future API changes or additions.
+Consistency: Adheres to the app's overall design theme.
 
 **배지희**
