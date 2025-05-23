@@ -94,3 +94,11 @@ so users will soon be able to revisit what they’ve learned and keep track of t
 
 그리고 현재는 복습 기능도 개발 중입니다.​
 사용자가 이전에 학습한 내용을 다시 확인하고, 학습 진행 상황을 점검할 수 있도록 할 예정입니다.​
+
+## Spec
+
+**우강식**
+
+**유윤지**
+
+**배지희**
