@@ -26,7 +26,7 @@ const Home = () => {
   ];
 
   return (
-    <div>
+    <div className="w-screen h-screen bg-cover bg-center flex flex-col items-center justify-center relative" style={{ backgroundImage: `url(${backgroundImage})` }}>
       {/* navbar */}
       <div></div>
       {/* Title */}
