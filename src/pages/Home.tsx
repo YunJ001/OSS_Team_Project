@@ -32,7 +32,8 @@ const Home = () => {
         <button onClick={() => setSoundOn(!soundOn)}>{soundOn ? <FaMusic /> : <FaVolumeMute />}</button>
       </div>
       {/* Title */}
-      <div></div>
+      <div className="mt-[4vh] mb-[2vh] text-white text-5xl font-bold tracking-wide leading-tight">STUDY English</div>
+      <div className="mb-[6vh] text-orange-300 text-3xl font-semibold">with</div>
       {/* Main */}
       <div></div>
     </div>
