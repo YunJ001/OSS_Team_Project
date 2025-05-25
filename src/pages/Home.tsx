@@ -27,8 +27,10 @@ const Home = () => {
 
   return (
     <div className="w-screen h-screen bg-cover bg-center flex flex-col items-center justify-center relative" style={{ backgroundImage: `url(${backgroundImage})` }}>
-      {/* navbar */}
-      <div></div>
+      {/* Sound toggle button */}
+      <div className="absolute top-6 right-6 flex items-center gap-4 text-white text-2xl z-10">
+        <button onClick={() => setSoundOn(!soundOn)}>{soundOn ? <FaMusic /> : <FaVolumeMute />}</button>
+      </div>
       {/* Title */}
       <div></div>
       {/* Main */}
