@@ -35,7 +35,28 @@ const Home = () => {
       <div className="mt-[4vh] mb-[2vh] text-white text-5xl font-bold tracking-wide leading-tight">STUDY English</div>
       <div className="mb-[6vh] text-orange-300 text-3xl font-semibold">with</div>
       {/* Main */}
-      <div></div>
+      <div className="flex flex-row justify-center items-end gap-[7vw] px-6">
+        {cards.map((card) => (
+          <div key={card.title} className="relative w-[260px] h-[360px] rounded-[24px] cursor-pointer group" onClick={() => navigate(card.route)}>
+            {/* 카드 본체 */}
+            <div
+              className="w-full h-full rounded-[24px] flex justify-center items-center relative border border-gray-300"
+              style={{
+                backgroundColor: 'white',
+                boxShadow: 'inset 0 10px 24px rgba(0,0,0,0.5)',
+              }}
+            >
+              {/* 기본 텍스트 (hover 시 숨김) */}
+              <span className="text-2xl font-bold text-gray-800 group-hover:opacity-0 transition duration-300">{card.title}</span>
+
+              {/* Hover 시 설명 표시 */}
+              <div className="absolute inset-0 bg-gray-700 bg-opacity-90 rounded-[24px] flex justify-center items-center opacity-0 group-hover:opacity-100 transition duration-300">
+                <span className="whitespace-pre-line text-white text-center font-bold text-base px-4">{card.description}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
