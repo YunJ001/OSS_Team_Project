@@ -25,7 +25,16 @@ const Home = () => {
     },
   ];
 
-  return <div>Home</div>;
+  return (
+    <div>
+      {/* navbar */}
+      <div></div>
+      {/* Title */}
+      <div></div>
+      {/* Main */}
+      <div></div>
+    </div>
+  );
 };
 
 export default Home;
