@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import backgroundImage from "../assets/background_2.jpg";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import backgroundImage from '../assets/background_2.jpg';
 
 interface WordData {
   english: string;
@@ -13,53 +13,41 @@ const Word = () => {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [currentWordData, setCurrentWordData] = useState<WordData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [loadingMessage, setLoadingMessage] = useState("");
+  const [loadingMessage, setLoadingMessage] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [allWordsForSession, setAllWordsForSession] = useState<WordData[]>([]);
 
   const navigate = useNavigate();
   const WORDS_API_KEY = import.meta.env.VITE_WORDS_API_KEY;
-  const GOOGLE_TRANSLATE_API_KEY = import.meta.env
-    .VITE_GOOGLE_TRANSLATE_API_KEY;
+  const GOOGLE_TRANSLATE_API_KEY = import.meta.env.VITE_GOOGLE_TRANSLATE_API_KEY;
 
   // 영어 단어를 한국어로 번역하는 함수
-  const translateEnglishToKorean = async (
-    englishWord: string
-  ): Promise<string> => {
+  const translateEnglishToKorean = async (englishWord: string): Promise<string> => {
     if (!GOOGLE_TRANSLATE_API_KEY) {
-      console.error("Google Translate API Key is not set.");
-      return "번역 API 키 없음";
+      console.error('Google Translate API Key is not set.');
+      return '번역 API 키 없음';
     }
     try {
-      const response = await fetch(
-        `https://translation.googleapis.com/language/translate/v2?key=${GOOGLE_TRANSLATE_API_KEY}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            q: englishWord,
-            source: "en",
-            target: "ko",
-            format: "text",
-          }),
-        }
-      );
+      const response = await fetch(`https://translation.googleapis.com/language/translate/v2?key=${GOOGLE_TRANSLATE_API_KEY}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          q: englishWord,
+          source: 'en',
+          target: 'ko',
+          format: 'text',
+        }),
+      });
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(
-          `Translation API error: ${
-            errorData.error ? errorData.error.message : response.statusText
-          }`
-        );
+        throw new Error(`Translation API error: ${errorData.error ? errorData.error.message : response.statusText}`);
       }
       const data = await response.json();
       return data.data.translations[0].translatedText;
     } catch (e: any) {
-      console.error("Error during translation:", e);
-      if (e.message.includes("API key not valid"))
-        return "번역 실패: API 키가 유효하지 않습니다.";
-      else if (e.message.includes("daily limit exceeded"))
-        return "번역 실패: 일일 사용량 한도 초과.";
+      console.error('Error during translation:', e);
+      if (e.message.includes('API key not valid')) return '번역 실패: API 키가 유효하지 않습니다.';
+      else if (e.message.includes('daily limit exceeded')) return '번역 실패: 일일 사용량 한도 초과.';
       return `번역 실패: ${e.message}`;
     }
   };
@@ -81,22 +69,18 @@ const Word = () => {
         setLoadingMessage(`단어 ${i + 1}개째 불러오는 중...`);
 
         try {
-          const wordsApiResp = await fetch(
-            `https://wordsapiv1.p.rapidapi.com/words/?random=true&limit=1`,
-            {
-              headers: {
-                "X-RapidAPI-Host": "wordsapiv1.p.rapidapi.com",
-                "X-RapidAPI-Key": WORDS_API_KEY,
-              },
-            }
-          );
-          if (!wordsApiResp.ok)
-            throw new Error(`WordsAPI error! Status: ${wordsApiResp.status}`);
+          const wordsApiResp = await fetch(`https://wordsapiv1.p.rapidapi.com/words/?random=true&limit=1`, {
+            headers: {
+              'X-RapidAPI-Host': 'wordsapiv1.p.rapidapi.com',
+              'X-RapidAPI-Key': WORDS_API_KEY,
+            },
+          });
+          if (!wordsApiResp.ok) throw new Error(`WordsAPI error! Status: ${wordsApiResp.status}`);
           const wordsApiData = await wordsApiResp.json();
           const englishWord = wordsApiData.word;
 
           if (!englishWord) {
-            throw new Error("Could not find a valid word from WordsAPI.");
+            throw new Error('Could not find a valid word from WordsAPI.');
           }
 
           setLoadingMessage(`'${englishWord}' 번역 중... (${i + 1}/${count})`);
@@ -107,18 +91,11 @@ const Word = () => {
           });
           foundValidWord = true;
         } catch (e: any) {
-          console.error(
-            `Error fetching and translating word ${
-              i + 1
-            } (attempt ${attempts}):`,
-            e
-          );
+          console.error(`Error fetching and translating word ${i + 1} (attempt ${attempts}):`, e);
           if (attempts >= MAX_ATTEMPTS_PER_WORD) {
             fetchedWords.push({
-              english: "오류 단어",
-              korean: `로딩 실패: ${
-                e.message ? e.message.substring(0, 30) : "알 수 없는 오류"
-              }...`,
+              english: '오류 단어',
+              korean: `로딩 실패: ${e.message ? e.message.substring(0, 30) : '알 수 없는 오류'}...`,
             });
             setError(`일부 단어 로딩에 실패했습니다. 콘솔을 확인해주세요.`);
             foundValidWord = true;
@@ -126,45 +103,35 @@ const Word = () => {
         }
       }
       if (!foundValidWord) {
-        console.warn(
-          `Warning: Could not find a valid word after ${MAX_ATTEMPTS_PER_WORD} attempts for word ${
-            i + 1
-          }.`
-        );
+        console.warn(`Warning: Could not find a valid word after ${MAX_ATTEMPTS_PER_WORD} attempts for word ${i + 1}.`);
       }
     }
     setAllWordsForSession(fetchedWords);
     if (fetchedWords.length > 0) {
       setCurrentWordData(fetchedWords[0]);
     } else {
-      setError("단어를 불러오는 데 실패했습니다. 단어 목록이 비어 있습니다.");
+      setError('단어를 불러오는 데 실패했습니다. 단어 목록이 비어 있습니다.');
       setCurrentWordData(null);
     }
     setIsLoading(false);
-    setLoadingMessage("");
+    setLoadingMessage('');
   };
 
-  const handleWordCountChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleWordCountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setWordCount(Number(event.target.value));
   };
 
   const handleStartClick = async () => {
     if (wordCount <= 0) {
-      alert("학습할 단어 수를 1개 이상 입력해주세요!");
+      alert('학습할 단어 수를 1개 이상 입력해주세요!');
       return;
     }
     if (!WORDS_API_KEY) {
-      alert(
-        "WordsAPI Key가 설정되지 않았습니다. .env 파일에 VITE_WORDS_API_KEY를 설정해주세요."
-      );
+      alert('WordsAPI Key가 설정되지 않았습니다. .env 파일에 VITE_WORDS_API_KEY를 설정해주세요.');
       return;
     }
     if (!GOOGLE_TRANSLATE_API_KEY) {
-      alert(
-        "Google Translate API Key가 설정되지 않았습니다. .env 파일에 VITE_GOOGLE_TRANSLATE_API_KEY를 설정해주세요."
-      );
+      alert('Google Translate API Key가 설정되지 않았습니다. .env 파일에 VITE_GOOGLE_TRANSLATE_API_KEY를 설정해주세요.');
       return;
     }
 
@@ -192,44 +159,28 @@ const Word = () => {
       setCurrentWordData(allWordsForSession[prevIndex]);
       setError(null);
     } else {
-      setError("이전 단어가 없습니다.");
+      setError('이전 단어가 없습니다.');
     }
   };
 
   // 'Test' 버튼 클릭 시
   const handleTestClick = () => {
-    navigate("/test");
+    navigate('/test', { state: { words: allWordsForSession } });
   };
 
   // 'Home' 버튼 클릭 시
   const handleHomeClick = () => {
-    navigate("/home");
+    navigate('/home');
   };
 
   // 화면 렌더링
   if (currentScreen === 1) {
     return (
-      <div
-        className="bg-black text-white h-screen flex flex-col justify-center items-center bg-cover bg-center"
-        style={{ backgroundImage: `url(${backgroundImage})` }}
-      >
-        <h1 className="tablet:text-5xl text-3xl font-bold mb-8">
-          Today's word count?
-        </h1>
-        <input
-          type="number"
-          placeholder="숫자를 입력하세요"
-          className="tablet:p-3 py-1 border border-gray-600 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 w-64 text-center tablet:text-2xl text-xl"
-          defaultValue={wordCount}
-          onChange={handleWordCountChange}
-          disabled={isLoading}
-        />
-        <button
-          className="mt-12 bg-gray-800/70 hover:bg-gray-800 text-white font-bold py-3 px-8 rounded-lg text-xl"
-          onClick={handleStartClick}
-          disabled={isLoading}
-        >
-          {isLoading ? loadingMessage : "Start"}
+      <div className="bg-black text-white h-screen flex flex-col justify-center items-center bg-cover bg-center" style={{ backgroundImage: `url(${backgroundImage})` }}>
+        <h1 className="tablet:text-5xl text-3xl font-bold mb-8">Today's word count?</h1>
+        <input type="number" placeholder="숫자를 입력하세요" className="tablet:p-3 py-1 border border-gray-600 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 w-64 text-center tablet:text-2xl text-xl" defaultValue={wordCount} onChange={handleWordCountChange} disabled={isLoading} />
+        <button className="mt-12 bg-gray-800/70 hover:bg-gray-800 text-white font-bold py-3 px-8 rounded-lg text-xl" onClick={handleStartClick} disabled={isLoading}>
+          {isLoading ? loadingMessage : 'Start'}
         </button>
         {error && <p className="text-red-500 mt-4">{error}</p>}
       </div>
@@ -237,37 +188,21 @@ const Word = () => {
   } else if (currentScreen === 2) {
     if (isLoading || !currentWordData) {
       return (
-        <div
-          className="bg-black text-white h-screen flex justify-center items-center bg-cover bg-center"
-          style={{ backgroundImage: `url(${backgroundImage})` }}
-        >
-          {isLoading ? (
-            <div className="loading-text">{loadingMessage}</div>
-          ) : (
-            "단어를 불러올 수 없습니다. 다시 시도해주세요."
-          )}
+        <div className="bg-black text-white h-screen flex justify-center items-center bg-cover bg-center" style={{ backgroundImage: `url(${backgroundImage})` }}>
+          {isLoading ? <div className="loading-text">{loadingMessage}</div> : '단어를 불러올 수 없습니다. 다시 시도해주세요.'}
         </div>
       );
     }
 
     return (
-      <div
-        className="bg-black text-white h-screen flex flex-col justify-center items-center bg-cover bg-center"
-        style={{ backgroundImage: `url(${backgroundImage})` }}
-      >
+      <div className="bg-black text-white h-screen flex flex-col justify-center items-center bg-cover bg-center" style={{ backgroundImage: `url(${backgroundImage})` }}>
         <div className="absolute top-8 right-8 tablet:text-2xl text-lg">
           {currentWordIndex + 1}/{allWordsForSession.length}
         </div>
-        <button
-          className="absolute left-8 text-white tablet:text-6xl text-4xl hover:text-gray-400/80"
-          onClick={handlePreviousWord}
-          disabled={currentWordIndex === 0}
-        >
+        <button className="absolute left-8 text-white tablet:text-6xl text-4xl hover:text-gray-400/80" onClick={handlePreviousWord} disabled={currentWordIndex === 0}>
           &lt;
         </button>
-        <div className="tablet:text-7xl text-xl font-bold mb-4 max-w-[90%]">
-          {currentWordData?.english}
-        </div>
+        <div className="tablet:text-7xl text-xl font-bold mb-4 max-w-[90%]">{currentWordData?.english}</div>
         <div className="tablet:text-4xl text-lg">{currentWordData?.korean}</div>
         <button
           className="absolute right-8 text-white tablet:text-6xl text-4xl hover:text-gray-400/80"
@@ -281,25 +216,14 @@ const Word = () => {
     );
   } else if (currentScreen === 3) {
     return (
-      <div
-        className="bg-black text-white h-screen flex flex-col justify-center items-center bg-cover bg-center"
-        style={{ backgroundImage: `url(${backgroundImage})` }}
-      >
+      <div className="bg-black text-white h-screen flex flex-col justify-center items-center bg-cover bg-center" style={{ backgroundImage: `url(${backgroundImage})` }}>
         <h1 className="tablet:text-7xl text-4xl font-bold mb-8">Well Done!!</h1>
-        <p className="tablet:text-4xl text-lg mb-12">
-          Why don't you take a test?
-        </p>
+        <p className="tablet:text-4xl text-lg mb-12">Why don't you take a test?</p>
         <div className="flex space-x-8">
-          <button
-            className="bg-gray-700/70 hover:bg-gray-600/70 text-white font-bold py-3 px-8 rounded-full text-xl"
-            onClick={handleTestClick}
-          >
+          <button className="bg-gray-700/70 hover:bg-gray-600/70 text-white font-bold py-3 px-8 rounded-full text-xl" onClick={handleTestClick}>
             Test
           </button>
-          <button
-            className="bg-gray-700/70 hover:bg-gray-600/70 text-white font-bold py-3 px-8 rounded-full text-xl"
-            onClick={handleHomeClick}
-          >
+          <button className="bg-gray-700/70 hover:bg-gray-600/70 text-white font-bold py-3 px-8 rounded-full text-xl" onClick={handleHomeClick}>
             Home
           </button>
         </div>
