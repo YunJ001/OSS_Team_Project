@@ -21,6 +21,12 @@ const Test = () => {
   const [score, setScore] = useState(0); // 맞힌 갯수
   const [isFinished, setIsFinished] = useState(false); // 테스트 종료 여부
 
+    // 테스트 시작 버튼 클릭 시 첫 문제로 진입
+  const handleStart = () => {
+    setCurrentIndex(0);
+  };
+
+
   if (allWords.length === 0) {
     return <div className="bg-black text-white h-screen flex justify-center items-center">단어 데이터가 없습니다. 홈으로 돌아가주세요.</div>;
   }
@@ -29,6 +35,16 @@ const Test = () => {
     <div>
       {/* 테스트 시작 전 화면 */}
       {currentIndex === -1 ? (
+        <>
+          <br />
+          <h1 className="text-3xl tablet:text-5xl font-bold mb-6">Let's get Test!</h1>
+          <button
+            className="mt-12 bg-gray-800/70 hover:bg-gray-800 text-white font-bold py-3 px-8 rounded-lg text-xl"
+            onClick={handleStart}
+          >
+            Start!
+          </button>
+        </>
       ): isFinished ? (
       // 테스트 완료 화면
       ) : (
