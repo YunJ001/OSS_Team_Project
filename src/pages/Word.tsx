@@ -18,8 +18,8 @@ const Word = () => {
   const [allWordsForSession, setAllWordsForSession] = useState<WordData[]>([]);
 
   const navigate = useNavigate();
-  const NAVER_CLIENT_ID = import.meta.env.VITE_NAVER_CLIENT_ID;
-  const NAVER_CLIENT_SECRET = import.meta.env.VITE_NAVER_CLIENT_SECRET;
+  const GOOGLE_TRANSLATE_API_KEY = import.meta.env
+    .VITE_GOOGLE_TRANSLATE_API_KEY;
 
   // Add delay function for rate limiting
   const delay = (ms: number) =>
@@ -29,35 +29,39 @@ const Word = () => {
   const translateEnglishToKorean = async (
     englishWord: string
   ): Promise<string> => {
-    if (!NAVER_CLIENT_ID || !NAVER_CLIENT_SECRET) {
-      console.error("Naver Papago API credentials are not set.");
+    if (!GOOGLE_TRANSLATE_API_KEY) {
+      console.error("Google Translate API Key is not set.");
       return "번역 API 키 없음";
     }
     try {
-      const response = await fetch("https://openapi.naver.com/v1/papago/n2mt", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          "X-Naver-Client-Id": NAVER_CLIENT_ID,
-          "X-Naver-Client-Secret": NAVER_CLIENT_SECRET,
-        },
-        body: `source=en&target=ko&text=${encodeURIComponent(englishWord)}`,
-      });
+      const response = await fetch(
+        `https://translation.googleapis.com/language/translate/v2?key=${GOOGLE_TRANSLATE_API_KEY}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            q: englishWord,
+            source: "en",
+            target: "ko",
+            format: "text",
+          }),
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(
-          `Translation API error: ${errorData.errorMessage || response.statusText}`
+          `Translation API error: ${errorData.error ? errorData.error.message : response.statusText}`
         );
       }
 
       const data = await response.json();
-      return data.message.result.translatedText;
+      return data.data.translations[0].translatedText;
     } catch (e: any) {
       console.error("Error during translation:", e);
-      if (e.message.includes("API key"))
+      if (e.message.includes("API key not valid"))
         return "번역 실패: API 키가 유효하지 않습니다.";
-      else if (e.message.includes("daily limit"))
+      else if (e.message.includes("daily limit exceeded"))
         return "번역 실패: 일일 사용량 한도 초과.";
       return `번역 실패: ${e.message}`;
     }
@@ -269,9 +273,9 @@ const Word = () => {
       alert("학습할 단어 수를 1개 이상 입력해주세요!");
       return;
     }
-    if (!NAVER_CLIENT_ID || !NAVER_CLIENT_SECRET) {
+    if (!GOOGLE_TRANSLATE_API_KEY) {
       alert(
-        "Naver Papago API credentials are not set. Please set VITE_NAVER_CLIENT_ID and VITE_NAVER_CLIENT_SECRET in .env file."
+        "Google Translate API Key가 설정되지 않았습니다. .env 파일에 VITE_GOOGLE_TRANSLATE_API_KEY를 설정해주세요."
       );
       return;
     }
