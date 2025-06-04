@@ -1,18 +1,15 @@
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import backgroundImage from "../assets/main_background.jpg";
-import { FaMusic, FaVolumeMute } from "react-icons/fa";
 
 const Home = () => {
   const navigate = useNavigate();
-  const [soundOn, setSoundOn] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -22,42 +19,6 @@ const Home = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  useEffect(() => {
-    // Create audio element
-    audioRef.current = new Audio("/Technology.mp3");
-    audioRef.current.loop = true;
-    audioRef.current.volume = 0.5;
-
-    // Cleanup on component unmount
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    // Handle sound state changes
-    if (audioRef.current) {
-      if (soundOn) {
-        const playPromise = audioRef.current.play();
-        if (playPromise !== undefined) {
-          playPromise.catch((error) => {
-            console.error("Error playing audio:", error);
-            setSoundOn(false);
-          });
-        }
-      } else {
-        audioRef.current.pause();
-      }
-    }
-  }, [soundOn]);
-
-  const handleSoundToggle = () => {
-    setSoundOn(!soundOn);
-  };
 
   const cards = [
     {
@@ -106,15 +67,6 @@ const Home = () => {
       className="w-screen h-screen bg-cover bg-center flex flex-col items-center justify-center relative"
       style={{ backgroundImage: `url(${backgroundImage})` }}
     >
-      {/* Sound toggle button */}
-      <div className="absolute top-6 right-6 flex items-center gap-4 text-white text-2xl z-10">
-        <button
-          onClick={handleSoundToggle}
-          className="hover:scale-110 transition-transform duration-200"
-        >
-          {soundOn ? <FaMusic /> : <FaVolumeMute />}
-        </button>
-      </div>
       {/* Title */}
       <div className="mt-[4vh] mb-[2vh] text-white text-5xl font-bold tracking-wide leading-tight">
         STUDY English
