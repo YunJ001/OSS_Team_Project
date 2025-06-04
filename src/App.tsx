@@ -4,28 +4,35 @@ import Home from "./pages/Home";
 import Test from "./pages/Test";
 import Review from "./pages/Review";
 import Word from "./pages/Word";
+import Layout from "./Layout";
 
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Splash />,
-    },
-    {
-      path: "/home",
-      element: <Home />,
-    },
-    {
-      path: "/test",
-      element: <Test />,
-    },
-    {
-      path: "/review",
-      element: <Review />,
-    },
-    {
-      path: "/word",
-      element: <Word />,
+      element: <Layout />,
+      children: [
+        {
+          path: "/",
+          element: <Splash />,
+        },
+        {
+          path: "/home",
+          element: <Home />,
+        },
+        {
+          path: "/test",
+          element: <Test />,
+        },
+        {
+          path: "/review",
+          element: <Review />,
+        },
+        {
+          path: "/word",
+          element: <Word />,
+        },
+      ],
     },
   ]);
   return (
