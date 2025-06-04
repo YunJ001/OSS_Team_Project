@@ -5,6 +5,7 @@ import Test from "./pages/Test";
 import Review from "./pages/Review";
 import Word from "./pages/Word";
 import Layout from "./Layout";
+import Chat from "./pages/Chat";
 
 function App() {
   const router = createBrowserRouter([
@@ -31,6 +32,10 @@ function App() {
         {
           path: "/word",
           element: <Word />,
+        },
+        {
+          path: "/chat",
+          element: <Chat />,
         },
       ],
     },

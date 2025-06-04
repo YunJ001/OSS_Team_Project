@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { FaMusic, FaVolumeMute } from "react-icons/fa";
+import { BiChat } from "react-icons/bi";
+import { BsArrowLeft } from "react-icons/bs";
 
 const Layout = () => {
   const [soundOn, setSoundOn] = useState(false);
@@ -40,8 +42,15 @@ const Layout = () => {
       }
     };
   }, []);
+  const nav = useNavigate();
   return (
     <div>
+      <div
+        onClick={() => nav(-1)}
+        className="absolute top-6 left-6 flex items-center gap-4 text-white text-2xl z-10"
+      >
+        <BsArrowLeft />
+      </div>
       {/* Sound toggle button */}
       <div className="absolute top-6 right-6 flex items-center gap-4 text-white text-2xl z-10">
         <button
@@ -50,6 +59,9 @@ const Layout = () => {
         >
           {soundOn ? <FaMusic /> : <FaVolumeMute />}
         </button>
+        <div className="cursor-pointer" onClick={() => nav("/chat")}>
+          <BiChat />
+        </div>
       </div>
       <Outlet />
     </div>

@@ -4,6 +4,7 @@ import gsap from "gsap";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { BeatLoader } from "react-spinners";
+import { useNavigate } from "react-router-dom";
 
 interface QuotesInteface {
   author: string;
@@ -12,6 +13,7 @@ interface QuotesInteface {
 
 const Splash = () => {
   gsap.registerPlugin(useGSAP);
+  const nav = useNavigate();
   useGSAP(() => {
     const tl = gsap.timeline();
     tl.fromTo(
@@ -28,7 +30,7 @@ const Splash = () => {
     };
     getQuotes();
     setTimeout(() => {
-      window.location.href = `${import.meta.env.VITE_BASE_URL}/home`;
+      nav("/home");
     }, 3000);
   }, []);
   return (
