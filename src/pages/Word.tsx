@@ -70,120 +70,27 @@ const Word = () => {
   // 영어 단어를 API에서 가져오는 함수
   const fetchWordFromAPI = async (retryCount = 0): Promise<string> => {
     try {
-      // Common English words list (1000 most common words)
-      const commonWords = [
-        "the",
-        "be",
-        "to",
-        "of",
-        "and",
-        "a",
-        "in",
-        "that",
-        "have",
-        "I",
-        "it",
-        "for",
-        "not",
-        "on",
-        "with",
-        "he",
-        "as",
-        "you",
-        "do",
-        "at",
-        "this",
-        "but",
-        "his",
-        "by",
-        "from",
-        "they",
-        "we",
-        "say",
-        "her",
-        "she",
-        "or",
-        "an",
-        "will",
-        "my",
-        "one",
-        "all",
-        "would",
-        "there",
-        "their",
-        "what",
-        "so",
-        "up",
-        "out",
-        "if",
-        "about",
-        "who",
-        "get",
-        "which",
-        "go",
-        "me",
-        "when",
-        "make",
-        "can",
-        "like",
-        "time",
-        "no",
-        "just",
-        "him",
-        "know",
-        "take",
-        "people",
-        "into",
-        "year",
-        "your",
-        "good",
-        "some",
-        "could",
-        "them",
-        "see",
-        "other",
-        "than",
-        "then",
-        "now",
-        "look",
-        "only",
-        "come",
-        "its",
-        "over",
-        "think",
-        "also",
-        "back",
-        "after",
-        "use",
-        "two",
-        "how",
-        "our",
-        "work",
-        "first",
-        "well",
-        "way",
-        "even",
-        "new",
-        "want",
-        "because",
-        "any",
-        "these",
-        "give",
-        "day",
-        "most",
-        "us",
-      ];
-
-      // Randomly select a word from the list
-      const randomWord =
-        commonWords[Math.floor(Math.random() * commonWords.length)];
-
-      // Verify the word exists in the dictionary
       const response = await fetch(
-        `https://api.dictionaryapi.dev/api/v2/entries/en/${randomWord}`
+        "https://random-word-api.herokuapp.com/word?number=1"
       );
 
       if (!response.ok) {
+        if (retryCount < 3) {
+          await delay(1000);
+          return fetchWordFromAPI(retryCount + 1);
+        }
+        throw new Error("Could not fetch a random word.");
+      }
+
+      const words = await response.json();
+      const randomWord = words[0];
+
+      // Verify the word exists in the dictionary
+      const dictResponse = await fetch(
+        `https://api.dictionaryapi.dev/api/v2/entries/en/${randomWord}`
+      );
+
+      if (!dictResponse.ok) {
         if (retryCount < 3) {
           await delay(1000);
           return fetchWordFromAPI(retryCount + 1);
