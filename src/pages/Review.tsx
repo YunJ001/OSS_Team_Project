@@ -4,6 +4,7 @@ import backgroundImage from "../assets/background_2.jpg";
 interface WordData {
   english: string;
   korean: string;
+  isCorrect: boolean;
 }
 
 const Review = () => {
@@ -23,14 +24,20 @@ const Review = () => {
     );
   }
 
+  const correctCount = words.filter((word) => word.isCorrect).length;
+  const incorrectCount = words.length - correctCount;
+
   return (
     <div
       className="bg-black text-white h-screen flex flex-col items-center bg-cover bg-center px-6"
       style={{ backgroundImage: `url(${backgroundImage})` }}
     >
-      <h1 className="text-3xl tablet:text-5xl font-bold mt-12 mb-8">
+      <h1 className="text-3xl tablet:text-5xl font-bold mt-12 mb-4">
         단어 복습
       </h1>
+      <div className="text-xl mb-8">
+        맞은 단어: {correctCount}개 / 틀린 단어: {incorrectCount}개
+      </div>
       <div className="w-full max-w-2xl">
         <div className="bg-gray-800/70 rounded-lg p-6 mb-8">
           <h2 className="text-xl tablet:text-2xl font-bold mb-4">
@@ -40,10 +47,25 @@ const Review = () => {
             {words.map((word, index) => (
               <div
                 key={index}
-                className="bg-gray-700/50 p-4 rounded-lg hover:bg-gray-700/70 transition-colors"
+                className={`p-4 rounded-lg transition-colors ${
+                  word.isCorrect
+                    ? "bg-green-900/50 hover:bg-green-900/70"
+                    : "bg-red-900/50 hover:bg-red-900/70"
+                }`}
               >
-                <div className="text-xl tablet:text-2xl font-bold mb-2">
-                  {word.english}
+                <div className="flex justify-between items-center mb-2">
+                  <div className="text-xl tablet:text-2xl font-bold">
+                    {word.english}
+                  </div>
+                  <div
+                    className={`text-sm px-2 py-1 rounded ${
+                      word.isCorrect
+                        ? "bg-green-500/50 text-green-200"
+                        : "bg-red-500/50 text-red-200"
+                    }`}
+                  >
+                    {word.isCorrect ? "정답" : "오답"}
+                  </div>
                 </div>
                 <div className="text-lg tablet:text-xl text-gray-300">
                   {word.korean}

@@ -8,6 +8,10 @@ interface WordData {
   korean: string;
 }
 
+interface WordResult extends WordData {
+  isCorrect: boolean;
+}
+
 const Test = () => {
   // 페이지 이동 횟수
   const navigate = useNavigate();
@@ -20,6 +24,7 @@ const Test = () => {
   const [userAnswer, setUserAnswer] = useState(""); // 사용자의 입력값
   const [score, setScore] = useState(0); // 맞힌 갯수
   const [isFinished, setIsFinished] = useState(false); // 테스트 종료 여부
+  const [wordResults, setWordResults] = useState<WordResult[]>([]);
 
   // 테스트 시작 버튼 클릭 시 첫 문제로 진입
   const handleStart = () => {
@@ -29,10 +34,20 @@ const Test = () => {
   const handleAnswerSubmit = () => {
     const correctAnswer = allWords[currentIndex].korean.trim();
     const userAnswerTrimmed = userAnswer.trim();
+    const isCorrect = correctAnswer === userAnswerTrimmed;
 
-    if (correctAnswer === userAnswerTrimmed) {
+    if (isCorrect) {
       setScore((prev) => prev + 1);
     }
+
+    setWordResults((prev) => [
+      ...prev,
+      {
+        ...allWords[currentIndex],
+        isCorrect,
+      },
+    ]);
+
     setUserAnswer("");
     if (currentIndex + 1 < allWords.length) {
       setCurrentIndex(currentIndex + 1);
@@ -46,7 +61,7 @@ const Test = () => {
   };
 
   const handleReviewClick = () => {
-    navigate("/review", { state: { words: allWords } });
+    navigate("/review", { state: { words: wordResults } });
   };
 
   if (allWords.length === 0) {
