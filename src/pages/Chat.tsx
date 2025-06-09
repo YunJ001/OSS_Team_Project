@@ -11,7 +11,7 @@ import {
   startAfter,
   getDocs,
 } from "firebase/firestore";
-import { database } from "../firebase";
+import { database } from "../firebase.ts";
 import backgroundImage from "../assets/main_background.jpg";
 
 interface ChatMessage {
